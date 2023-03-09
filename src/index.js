@@ -11,7 +11,7 @@ app.use(express.json()); //se indica que se va a usar la funcionalidad para mane
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'contrasena123',
     database: 'almacen'
 });
 // Rutas para productos
