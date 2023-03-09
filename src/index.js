@@ -31,7 +31,7 @@ app.get('/productos/:id', async (req, res) => {
 });
 app.post('/productos', async (req, res) => {
     const conn = await pool.getConnection();
-    const [result] = await conn.query('INSERT INTO productos VALUES (null, ?, ?, ?)', [req.body.nombre, req.body.descripcion, req.body.precio]);
+    const [result] = await conn.query('INSERT INTO productos VALUES (null, ?, ?, ?, ?)', [req.body.nombre, req.body.descripcion, req.body.precio, req.body.inventario]);
     const [rows] = await conn.query('SELECT * FROM productos WHERE id = ?',
         [result.insertId]);
     conn.release();
@@ -39,7 +39,7 @@ app.post('/productos', async (req, res) => {
 });
 app.put('/productos/:id', async (req, res) => {
     const conn = await pool.getConnection();
-    const [result] = await conn.query('UPDATE productos SET nombre=?, descripcion =?, precio =? WHERE id =? ', [req.body.nombre, req.body.descripcion, req.body.precio, req.params.id]);
+    const [result] = await conn.query('UPDATE productos SET nombre=?, descripcion =?, precio =?, inventario = ? WHERE id =? ', [req.body.nombre, req.body.descripcion, req.body.precio, req.body.inventario, req.params.id]);
     const [rows] = await conn.query('SELECT * FROM productos WHERE id = ?',
         [req.params.id]);
     conn.release();
@@ -79,7 +79,7 @@ app.get('/user/:usuario/:password', async (req, res) => {
 app.post('/user', async (req, res) => {
     const conn = await pool.getConnection();
     console.log(req.body)
-    const [result] = await conn.query('INSERT INTO user VALUES (null, ?, ?, ?, ?, ?)', [req.body.nombre, req.body.apellido, req.body.usuario, req.body.password, req.body.telefono]);
+    const [result] = await conn.query('INSERT INTO user VALUES (null, ?, ?, ?, ?, ?, ?, 0)', [req.body.nombre, req.body.apellido, req.body.usuario, req.body.password, req.body.telefono, req.body.email]);
     const [rows] = await conn.query('SELECT * FROM user WHERE id = ?',
         [result.insertId]);
     conn.release();
@@ -87,7 +87,7 @@ app.post('/user', async (req, res) => {
 });
 app.put('/user/:id', async (req, res) => {
     const conn = await pool.getConnection();
-    const [result] = await conn.query('UPDATE user SET nombre=?, apellido =?, usuario =?, password =?, telefono =? WHERE id =? ', [req.body.nombre, req.body.apellido, req.body.usuario, req.body.password, req.body.telefono, req.body.id]);
+    const [result] = await conn.query('UPDATE user SET nombre=?, apellido =?, usuario =?, password =?, telefono =?, email = ? WHERE id =? ', [req.body.nombre, req.body.apellido, req.body.usuario, req.body.password, req.body.telefono, req.body.email, req.body.id]);
     const [rows] = await conn.query('SELECT * FROM user WHERE id = ?',
         [req.params.id]);
     conn.release();
