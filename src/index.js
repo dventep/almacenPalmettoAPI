@@ -11,19 +11,19 @@ app.use(express.json()); //se indica que se va a usar la funcionalidad para mane
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'contrasena123',
+    password: '1234',
     database: 'almacen'
 });
 // Rutas para productos
 app.get('/productos', async (req, res) => {
     const conn = await pool.getConnection();
-    const [rows] = await conn.query('SELECT * FROM productos');
+    const [rows] = await conn.query('SELECT * FROM product');
     conn.release();
     res.json(rows);
 });
 app.get('/productos/:id', async (req, res) => {
     const conn = await pool.getConnection();
-    const [rows] = await conn.query('SELECT * FROM productos WHERE id = ?',
+    const [rows] = await conn.query('SELECT * FROM product WHERE id = ?',
         [req.params.id]);
     conn.release();
     if (rows.length === 0) return res.status(404).send('Producto no encontrado');
@@ -31,23 +31,23 @@ app.get('/productos/:id', async (req, res) => {
 });
 app.post('/productos', async (req, res) => {
     const conn = await pool.getConnection();
-    const [result] = await conn.query('INSERT INTO productos VALUES (null, ?, ?, ?, ?)', [req.body.nombre, req.body.descripcion, req.body.precio, req.body.inventario]);
-    const [rows] = await conn.query('SELECT * FROM productos WHERE id = ?',
+    const [result] = await conn.query('INSERT INTO product VALUES (null, ?, ?, ?, ?)', [req.body.nombre, req.body.descripcion, req.body.precio, req.body.inventario]);
+    const [rows] = await conn.query('SELECT * FROM product WHERE id = ?',
         [result.insertId]);
     conn.release();
     res.json(rows[0]);
 });
 app.put('/productos/:id', async (req, res) => {
     const conn = await pool.getConnection();
-    const [result] = await conn.query('UPDATE productos SET nombre=?, descripcion =?, precio =?, inventario = ? WHERE id =? ', [req.body.nombre, req.body.descripcion, req.body.precio, req.body.inventario, req.params.id]);
-    const [rows] = await conn.query('SELECT * FROM productos WHERE id = ?',
+    const [result] = await conn.query('UPDATE product SET nombre=?, descripcion =?, precio =?, inventario = ? WHERE id =? ', [req.body.nombre, req.body.descripcion, req.body.precio, req.body.inventario, req.params.id]);
+    const [rows] = await conn.query('SELECT * FROM product WHERE id = ?',
         [req.params.id]);
     conn.release();
     res.json(rows[0]);
 });
 app.delete('/productos/:id', async (req, res) => {
     const conn = await pool.getConnection();
-    const [rows] = await conn.query('DELETE FROM productos WHERE id = ?',
+    const [rows] = await conn.query('DELETE FROM product WHERE id = ?',
         [req.params.id]);
     conn.release();
     res.send("producto borrado");
